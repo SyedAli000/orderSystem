@@ -3,7 +3,6 @@ import {
   Tabs,
   Tab,
   Box,
-  Typography,
   useMediaQuery,
   useTheme,
   Pagination,
