@@ -1,0 +1,44 @@
+.captured-image-container {
+  width: 100%;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.captured-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Media queries for different screen sizes */
+@media screen and (max-width: 425px) {
+  .captured-image {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .camera-controls {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .camera-controls button {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 426px) and (max-width: 768px) {
+  .captured-image {
+    max-width: 80%;
+  }
+}
+
+@media screen and (max-width: 769px) {
+  .captured-image {
+    max-width: 300px;
+  }
+} 
+

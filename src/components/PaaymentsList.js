@@ -15,6 +15,7 @@ import {
 import moment from "moment";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import FlipCameraIosIcon from '@mui/icons-material/FlipCameraIos';
+import './PaymentsList.css';
 
 // Mock payments data (replace with actual prop if needed)
 const mockPayments = [
@@ -123,7 +124,7 @@ const PaymentsTable = ({ payments = mockPayments }) => {
             muted
             style={{ width: '100%', maxWidth: '500px', border: '1px solid #ccc' }}
           />
-          <Box sx={{ mt: 1, display: 'flex', gap: 1 }}>
+          <Box sx={{ mt: 1, display: 'flex', gap: 1 }} className="camera-controls">
             <Button variant="contained" color="primary" onClick={captureImage}>
               Capture
             </Button>
@@ -142,8 +143,8 @@ const PaymentsTable = ({ payments = mockPayments }) => {
       )}
 
       {capturedImage && (
-        <Box sx={{ mb: 2 }}>
-          <img src={capturedImage} alt="Captured" style={{ maxWidth: '500px' }} />
+        <Box className="captured-image-container">
+          <img src={capturedImage} alt="Captured" className="captured-image" />
         </Box>
       )}
 
