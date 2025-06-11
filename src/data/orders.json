@@ -1,0 +1,58 @@
+{
+  "orders": {
+    "active": [
+      {
+        "id": "ORD-1001",
+        "batch": "BATCH-2023-001",
+        "shippingAddress": "123 Main St, San Francisco, CA 94105",
+        "content": "Laptop Accessories",
+        "quantity": 5,
+        "status": "active"
+      },
+      {
+        "id": "ORD-1002",
+        "batch": "BATCH-2023-001",
+        "shippingAddress": "456 Oak Ave, New York, NY 10001",
+        "content": "Office Supplies",
+        "quantity": 12,
+        "status": "active"
+      },
+      {
+        "id": "ORD-1003",
+        "batch": "BATCH-2023-002",
+        "shippingAddress": "789 Pine Rd, Chicago, IL 60601",
+        "content": "Books",
+        "quantity": 8,
+        "status": "active"
+      }
+    ],
+    "shipped": [
+      {
+        "id": "ORD-0999",
+        "batch": "BATCH-2022-045",
+        "shippingAddress": "321 Elm Blvd, Austin, TX 78701",
+        "content": "Electronics",
+        "quantity": 3,
+        "status": "shipped"
+      },
+      {
+        "id": "ORD-1000",
+        "batch": "BATCH-2022-045",
+        "shippingAddress": "654 Maple Dr, Seattle, WA 98101",
+        "content": "Home Goods",
+        "quantity": 7,
+        "status": "shipped"
+      }
+    ],
+    "mine": [
+      {
+        "id": "ORD-1004",
+        "batch": "BATCH-2023-003",
+        "shippingAddress": "159 Cedar Ln, Boston, MA 02108",
+        "content": "Personal Items",
+        "quantity": 4,
+        "status": "mine"
+      }
+    ]
+  }
+}
