@@ -62,9 +62,6 @@ const PaymentsTable = ({ payments = mockPayments }) => {
         streamRef.current = null;
         console.log("Camera stream stopped and cleared.");
       }
-      if (videoRef.current) {
-        videoRef.current.srcObject = null; 
-      }
     };
   }, [showCamera]);
 
