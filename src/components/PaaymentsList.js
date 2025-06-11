@@ -9,10 +9,12 @@ import {
   Paper,
   Typography,
   Button,
-  Box
+  Box,
+  IconButton
 } from "@mui/material";
 import moment from "moment";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import FlipCameraIosIcon from '@mui/icons-material/FlipCameraIos';
 
 // Mock payments data (replace with actual prop if needed)
 const mockPayments = [
@@ -33,24 +35,29 @@ const mockPayments = [
 const PaymentsTable = ({ payments = mockPayments }) => {
   const [showCamera, setShowCamera] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
+  const [facingMode, setFacingMode] = useState('user'); // 'user' for front camera, 'environment' for back camera
   const videoRef = useRef(null);
-  const streamRef = useRef(null); 
+  const streamRef = useRef(null);
 
   useEffect(() => {
     if (showCamera && !streamRef.current) {
       const enableStream = async () => {
         try {
-          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-          streamRef.current = stream; 
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              facingMode: facingMode
+            }
+          });
+          streamRef.current = stream;
           console.log("Camera stream obtained in useEffect:", stream);
           if (videoRef.current) {
             videoRef.current.srcObject = stream;
-            videoRef.current.play(); 
+            videoRef.current.play();
             console.log("Video element srcObject set and play() called in useEffect.");
           }
         } catch (err) {
           console.error("Error accessing camera in useEffect:", err);
-          setShowCamera(false); 
+          setShowCamera(false);
         }
       };
       enableStream();
@@ -63,17 +70,21 @@ const PaymentsTable = ({ payments = mockPayments }) => {
         console.log("Camera stream stopped and cleared.");
       }
     };
-  }, [showCamera]);
+  }, [showCamera, facingMode]);
 
   const startCamera = () => {
     if (!showCamera) {
       setShowCamera(true);
-      setCapturedImage(null); 
+      setCapturedImage(null);
     }
   };
 
   const stopCamera = () => {
-    setShowCamera(false); 
+    setShowCamera(false);
+  };
+
+  const switchCamera = () => {
+    setFacingMode(prevMode => prevMode === 'user' ? 'environment' : 'user');
   };
 
   const captureImage = () => {
@@ -109,13 +120,20 @@ const PaymentsTable = ({ payments = mockPayments }) => {
             ref={videoRef}
             autoPlay
             playsInline
-            muted // Often needed for autoplay to work reliably
+            muted
             style={{ width: '100%', maxWidth: '500px', border: '1px solid #ccc' }}
           />
-          <Box sx={{ mt: 1 }}>
-            <Button variant="contained" color="primary" onClick={captureImage} sx={{ mr: 1 }}>
+          <Box sx={{ mt: 1, display: 'flex', gap: 1 }}>
+            <Button variant="contained" color="primary" onClick={captureImage}>
               Capture
             </Button>
+            <IconButton 
+              color="primary" 
+              onClick={switchCamera}
+              sx={{ border: '1px solid #ccc' }}
+            >
+              <FlipCameraIosIcon />
+            </IconButton>
             <Button variant="outlined" onClick={stopCamera}>
               Cancel
             </Button>
