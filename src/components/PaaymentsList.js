@@ -106,12 +106,12 @@ const PaymentsTable = ({ payments = mockPayments }) => {
       <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Typography variant="h6">Payments List</Typography>
         <Button
-          variant="contained"
+          variant="outlined"
           startIcon={<CameraAltIcon />}
           onClick={startCamera}
           disabled={showCamera}
         >
-          Take Picture
+          Camera
         </Button>
       </Box>
 
@@ -147,6 +147,8 @@ const PaymentsTable = ({ payments = mockPayments }) => {
           <img src={capturedImage} alt="Captured" className="captured-image" />
         </Box>
       )}
+<Box sx={{ overflowX: 'auto' }}>
+  
 
       <TableContainer>
         <Table>
@@ -176,6 +178,7 @@ const PaymentsTable = ({ payments = mockPayments }) => {
           </TableBody>
         </Table>
       </TableContainer>
+      </Box>
     </Paper>
   );
 };
