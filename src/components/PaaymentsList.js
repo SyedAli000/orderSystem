@@ -74,7 +74,7 @@ const PaymentsTable = ({ payments = mockPayments }) => {
         </Box>
       </Paper>
 
-      {/* <CameraOverlay
+      <CameraOverlay
         open={showCamera}
         onClose={() => setShowCamera(false)}
         onCapture={(image) => setCapturedImage(image)}
@@ -91,7 +91,7 @@ const PaymentsTable = ({ payments = mockPayments }) => {
         }}
       >
         <CameraAltIcon />
-      </Fab> */}
+      </Fab>
       <CameraOverlay/>
     </Box>
   );

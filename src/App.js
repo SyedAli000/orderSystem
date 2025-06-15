@@ -38,27 +38,27 @@ function AppContent({ orders }) {
           <Route
             path="/orders"
             element={
-              // <ProtectedRoute>
+              <ProtectedRoute>
               <>
                 <Typography variant="h4" sx={styles.header}>
                   Order Management
                 </Typography>
                 {orders && <OrderTabs orders={orders} />}
                 </>
-              //  </ProtectedRoute>
+               </ProtectedRoute>
             }
           />
           <Route
             path="/payments"
             element={
-              // <ProtectedRoute>
+              <ProtectedRoute>
               <>
                 <Typography variant="h4" sx={styles.header}>
                   Payments
                 </Typography>
                 <PaymentsTable />
                 </>
-              // </ProtectedRoute>
+              </ProtectedRoute>
             }
           />
         </Routes>

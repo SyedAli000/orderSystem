@@ -7,7 +7,6 @@ import {
   IconButton,
   Toolbar,
   AppBar,
-  Typography,
   useTheme,
   useMediaQuery
 } from "@mui/material";
