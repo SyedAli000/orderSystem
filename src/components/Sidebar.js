@@ -69,9 +69,6 @@ const Sidebar = () => {
             <IconButton color="inherit" edge="start" onClick={handleDrawerToggle}>
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap>
-              Menu
-            </Typography>
           </Toolbar>
         </AppBar>
       )}
@@ -89,7 +86,8 @@ const Sidebar = () => {
           flexShrink: 0,
           "& .MuiDrawer-paper": {
             width: drawerWidth,
-            boxSizing: "border-box"
+            boxSizing: "border-box",
+            overflowX: "hidden" 
           }
         }}
       >
