@@ -3,10 +3,11 @@ import {
   Container,
   Typography,
   CircularProgress,
-  CssBaseline
+  CssBaseline,
+  useMediaQuery
 } from "@mui/material";
-import { ThemeProvider } from "@mui/material/styles";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ThemeProvider, useTheme } from "@mui/material/styles";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
 import OrderTabs from "./components/OrderTabs";
 import Login from "./components/Login";
@@ -16,32 +17,48 @@ import Sidebar from "./components/Sidebar";
 import { theme, styles } from "./styles/globalStyles";
 
 function AppContent({ orders }) {
+  const drawerWidth = 240;
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const location = useLocation();
+
+  const showSidebar = location.pathname !== "/";
+
   return (
     <>
       <Sidebar />
-      <Container sx={{ ...styles.appContainer, ml: 25 }}>
+      <Container sx={{ ...styles.appContainer,
+         overflowX: 'hidden',
+         width: '100%',
+         ml: showSidebar && !isMobile ? `${drawerWidth}px` : 0,
+       }}>
         <Routes>
           <Route path="/" element={<Login />} />
           <Route
             path="/orders"
             element={
-              <ProtectedRoute>
+              // <ProtectedRoute>
+              <>
                 <Typography variant="h4" sx={styles.header}>
                   Order Management
                 </Typography>
                 {orders && <OrderTabs orders={orders} />}
-              </ProtectedRoute>
+                </>
+              //  </ProtectedRoute>
             }
           />
           <Route
             path="/payments"
             element={
-              <ProtectedRoute>
+              // <ProtectedRoute>
+              <>
                 <Typography variant="h4" sx={styles.header}>
                   Payments
                 </Typography>
                 <PaymentsTable />
-              </ProtectedRoute>
+                </>
+              // </ProtectedRoute>
             }
           />
         </Routes>

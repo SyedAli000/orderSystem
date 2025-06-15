@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -8,16 +8,14 @@ import {
   TableRow,
   Paper,
   Typography,
-  Button,
   Box,
-  IconButton
+  Fab
 } from "@mui/material";
-import moment from "moment";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import FlipCameraIosIcon from '@mui/icons-material/FlipCameraIos';
+import moment from "moment";
+import CameraOverlay from "./CameraOverlay";
 import './PaymentsList.css';
 
-// Mock payments data (replace with actual prop if needed)
 const mockPayments = [
   {
     id: 1,
@@ -36,147 +34,66 @@ const mockPayments = [
 const PaymentsTable = ({ payments = mockPayments }) => {
   const [showCamera, setShowCamera] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
-  const [facingMode, setFacingMode] = useState('user'); // 'user' for front camera, 'environment' for back camera
-  const videoRef = useRef(null);
-  const streamRef = useRef(null);
-
-  useEffect(() => {
-    if (showCamera && !streamRef.current) {
-      const enableStream = async () => {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-              facingMode: facingMode
-            }
-          });
-          streamRef.current = stream;
-          console.log("Camera stream obtained in useEffect:", stream);
-          if (videoRef.current) {
-            videoRef.current.srcObject = stream;
-            videoRef.current.play();
-            console.log("Video element srcObject set and play() called in useEffect.");
-          }
-        } catch (err) {
-          console.error("Error accessing camera in useEffect:", err);
-          setShowCamera(false);
-        }
-      };
-      enableStream();
-    }
-
-    return () => {
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach(track => track.stop());
-        streamRef.current = null;
-        console.log("Camera stream stopped and cleared.");
-      }
-    };
-  }, [showCamera, facingMode]);
-
-  const startCamera = () => {
-    if (!showCamera) {
-      setShowCamera(true);
-      setCapturedImage(null);
-    }
-  };
-
-  const stopCamera = () => {
-    setShowCamera(false);
-  };
-
-  const switchCamera = () => {
-    setFacingMode(prevMode => prevMode === 'user' ? 'environment' : 'user');
-  };
-
-  const captureImage = () => {
-    if (videoRef.current) {
-      const canvas = document.createElement('canvas');
-      canvas.width = videoRef.current.videoWidth;
-      canvas.height = videoRef.current.videoHeight;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(videoRef.current, 0, 0);
-      const imageUrl = canvas.toDataURL('image/jpeg');
-      setCapturedImage(imageUrl);
-      stopCamera(); 
-    }
-  };
 
   return (
-    <Paper elevation={3} sx={{ p: 3 }}>
-      <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h6">Payments List</Typography>
-        <Button
-          variant="contained"
-          startIcon={<CameraAltIcon />}
-          onClick={startCamera}
-          disabled={showCamera}
-        >
-          Take Picture
-        </Button>
-      </Box>
+    <Box sx={{ position: 'relative', pb: 8 }}>
+      <Paper elevation={3} sx={{ p: 3 }}>
+        <Typography variant="h6" gutterBottom>
+          Payments List
+        </Typography>
 
-      {showCamera && (
-        <Box sx={{ mb: 2, position: 'relative' }}>
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            muted
-            style={{ width: '100%', maxWidth: '500px', border: '1px solid #ccc' }}
-          />
-          <Box sx={{ mt: 1, display: 'flex', gap: 1 }} className="camera-controls">
-            <Button variant="contained" color="primary" onClick={captureImage}>
-              Capture
-            </Button>
-            <IconButton 
-              color="primary" 
-              onClick={switchCamera}
-              sx={{ border: '1px solid #ccc' }}
-            >
-              <FlipCameraIosIcon />
-            </IconButton>
-            <Button variant="outlined" onClick={stopCamera}>
-              Cancel
-            </Button>
+        {capturedImage && (
+          <Box className="captured-image-container">
+            <img src={capturedImage} alt="Captured" className="captured-image" />
           </Box>
-        </Box>
-      )}
+        )}
 
-      {capturedImage && (
-        <Box className="captured-image-container">
-          <img src={capturedImage} alt="Captured" className="captured-image" />
+        <Box sx={{ overflowX: 'auto' }}>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell><strong>Date</strong></TableCell>
+                  <TableCell><strong>Amount</strong></TableCell>
+                  <TableCell><strong>Receiver</strong></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {payments.map((payment) => (
+                  <TableRow key={payment.id}>
+                    <TableCell>
+                      {moment(payment.date).format("DD MMMM, YYYY [at] hh:mm A")}
+                    </TableCell>
+                    <TableCell>${payment.amount.toFixed(2)}</TableCell>
+                    <TableCell>{payment.receiver}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Box>
-      )}
+      </Paper>
 
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <strong>Date</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Amount</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Receiver</strong>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {payments.map((payment) => (
-              <TableRow key={payment.id}>
-                <TableCell>
-                  {moment(payment.date).format("DD MMMM, YYYY [at] hh:mm A")}
-                </TableCell>
-                <TableCell>${payment.amount.toFixed(2)}</TableCell>
-                <TableCell>{payment.receiver}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Paper>
+      {/* <CameraOverlay
+        open={showCamera}
+        onClose={() => setShowCamera(false)}
+        onCapture={(image) => setCapturedImage(image)}
+      />
+
+      <Fab
+        color="primary"
+        onClick={() => setShowCamera(true)}
+        sx={{
+          position: 'fixed',
+          bottom: 24,
+          right: 24,
+          zIndex: 1200
+        }}
+      >
+        <CameraAltIcon />
+      </Fab> */}
+      <CameraOverlay/>
+    </Box>
   );
 };
 

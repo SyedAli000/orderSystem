@@ -1,8 +1,13 @@
 import React, { useState } from "react";
-import { Box, Button, TextField, Typography, Paper } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Box, Button, TextField, Typography, Paper, useTheme, useMediaQuery } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Login = () => {
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const location = useLocation();
+
   const [code, setCode] = useState("");
   const navigate = useNavigate();
 
@@ -23,6 +28,7 @@ const Login = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        ml: isMobile ? 0 :30,
         px: 2, // horizontal padding on small screens
       }}
     >

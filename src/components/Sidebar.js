@@ -1,20 +1,39 @@
-import React from "react";
-import { Drawer, List, ListItem, ListItemText } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
+  Toolbar,
+  AppBar,
+  Typography,
+  useTheme,
+  useMediaQuery
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate, useLocation } from "react-router-dom";
+
+const drawerWidth = 240;
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Don't show sidebar on login page
-  if (location.pathname === "/") return null;
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
 
   const handleNavigation = (path) => {
     if (path === "/logout") {
-      navigate("/"); // Navigate to login
+      navigate("/");
     } else {
       navigate(path);
     }
+    if (isMobile) setMobileOpen(false); // close drawer on mobile
   };
 
   const menuItems = [
@@ -23,21 +42,61 @@ const Sidebar = () => {
     { label: "Logout", path: "/logout" }
   ];
 
+  // Don't show sidebar on login page
+  if (location.pathname === "/") return null;
+
+  const drawerContent = (
+    <List sx={{ width: drawerWidth, marginTop: isMobile? '50px' : ''}}>
+      {menuItems.map((item) => (
+        <ListItem
+          button
+          key={item.label}
+          onClick={() => handleNavigation(item.path)}
+          selected={location.pathname === item.path}
+        >
+          <ListItemText primary={item.label} />
+        </ListItem>
+      ))}
+    </List>
+  );
+
   return (
-    <Drawer variant="permanent" anchor="left">
-      <List sx={{ width: 200, mt: 2 }}>
-        {menuItems.map((item) => (
-          <ListItem
-            button
-            key={item.label}
-            onClick={() => handleNavigation(item.path)}
-            selected={location.pathname === item.path}
-          >
-            <ListItemText primary={item.label} />
-          </ListItem>
-        ))}
-      </List>
-    </Drawer>
+    <>
+      {/* AppBar for Mobile Toggle */}
+      {isMobile && (
+        <AppBar position="fixed" sx={{ zIndex: theme.zIndex.drawer + 1 }}>
+          <Toolbar>
+            <IconButton color="inherit" edge="start" onClick={handleDrawerToggle}>
+              <MenuIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+      )}
+
+      {/* Drawer */}
+      <Drawer
+        variant={isMobile ? "temporary" : "permanent"}
+        open={isMobile ? mobileOpen : true}
+        onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true
+        }}
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: drawerWidth,
+            boxSizing: "border-box",
+            overflowX: "hidden" 
+          }
+        }}
+      >
+        {drawerContent}
+      </Drawer>
+
+      {/* Spacer if mobile AppBar exists */}
+      {isMobile && <Toolbar />}
+    </>
   );
 };
 

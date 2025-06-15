@@ -9,6 +9,7 @@ import {
   Stack,
 } from "@mui/material";
 import OrderCard from "./OrderCard";
+import CameraOverlay from "./CameraOverlay";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -64,14 +65,17 @@ const OrderTabs = ({ orders }) => {
 
   return (
     <Box sx={{ width: "100%", overflow: "hidden" }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider", width: "100%" }}>
+      <Box sx={{ borderBottom: 1, borderColor: "divider", width: "100%", overflow: "hidden" }}>
         <Tabs
           value={value}
           onChange={handleChange}
           aria-label="order tabs"
           variant={isMobile ? "scrollable" : "standard"}
           scrollButtons="auto"
-          sx={{ maxWidth: "100%" }}
+          sx={{
+            width: "100%",     // use full width
+            overflow: "hidden" // avoid scroll
+          }}
         >
           {tabLabels.map((tab, index) => (
             <Tab
@@ -112,6 +116,7 @@ const OrderTabs = ({ orders }) => {
             flexDirection: "column",
             gap: 2,
             width: "100%",
+            // overflow: 'hidden'
           }}
         >
           {getPaginatedOrders(orders.active).map((order) => (
@@ -184,6 +189,7 @@ const OrderTabs = ({ orders }) => {
         </Stack>
         {/* )} */}
       </TabPanel>
+      <CameraOverlay/>
     </Box>
   );
 };
