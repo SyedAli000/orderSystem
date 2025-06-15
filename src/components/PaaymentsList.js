@@ -36,11 +36,18 @@ const PaymentsTable = ({ payments = mockPayments }) => {
   const [capturedImage, setCapturedImage] = useState(null);
 
   return (
-    <Box sx={{ position: 'relative', pb: 8 }}>
-      <Paper elevation={3} sx={{ p: 3 }}>
-        <Typography variant="h6" gutterBottom>
-          Payments List
-        </Typography>
+    <Paper elevation={3} sx={{ p: 3 }}>
+      <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Typography variant="h6">Payments List</Typography>
+        <Button
+          variant="outlined"
+          startIcon={<CameraAltIcon />}
+          onClick={startCamera}
+          disabled={showCamera}
+        >
+          Camera
+        </Button>
+      </Box>
 
         {capturedImage && (
           <Box className="captured-image-container">
@@ -72,28 +79,40 @@ const PaymentsTable = ({ payments = mockPayments }) => {
             </Table>
           </TableContainer>
         </Box>
-      </Paper>
+      )}
+<Box sx={{ overflowX: 'auto' }}>
+  
 
-      {/* <CameraOverlay
-        open={showCamera}
-        onClose={() => setShowCamera(false)}
-        onCapture={(image) => setCapturedImage(image)}
-      />
-
-      <Fab
-        color="primary"
-        onClick={() => setShowCamera(true)}
-        sx={{
-          position: 'fixed',
-          bottom: 24,
-          right: 24,
-          zIndex: 1200
-        }}
-      >
-        <CameraAltIcon />
-      </Fab> */}
-      <CameraOverlay/>
-    </Box>
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                <strong>Date</strong>
+              </TableCell>
+              <TableCell>
+                <strong>Amount</strong>
+              </TableCell>
+              <TableCell>
+                <strong>Receiver</strong>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {payments.map((payment) => (
+              <TableRow key={payment.id}>
+                <TableCell>
+                  {moment(payment.date).format("DD MMMM, YYYY [at] hh:mm A")}
+                </TableCell>
+                <TableCell>${payment.amount.toFixed(2)}</TableCell>
+                <TableCell>{payment.receiver}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      </Box>
+    </Paper>
   );
 };
 
