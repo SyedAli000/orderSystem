@@ -2,9 +2,9 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ children }) => {
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const isAuthenticated = localStorage.getItem("isLoggedIn") === "true" && localStorage.getItem("token");
 
-  if (!isLoggedIn) {
+  if (!isAuthenticated) {
     // Redirect to login page if not authenticated
     return <Navigate to="/" replace />;
   }

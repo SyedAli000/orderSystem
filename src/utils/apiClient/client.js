@@ -45,7 +45,7 @@ export default class ApiClient {
         await this.client.post(this.apiUrl + path, data, await this.getConfigurations(path))
       )
     } catch (error) {
-      console.log('.......................', error)
+      // console.log('.......................', error)
       return await this.handleError(error, path)
     }
   }
@@ -68,27 +68,44 @@ export default class ApiClient {
     let data
     if (error.response) {
       data = error.response.data
-      console.error(`Error in ${path}:`, error.response)
+      // console.error(`Error in ${path}:`, error.response)
       if (error.response.status === 401) {
-        console.warn('Unauthorized access - removing token.')
+        // console.warn('Unauthorized access - removing token.')
         await removeToken()
       }
 
       if (error.response.status === 403) {
-        console.warn('Forbidden access - redirecting to dashboard.')
+        // console.warn('Forbidden access - redirecting to dashboard.')
       }
 
       if (error.response.status === 500) {
-        console.error('Server error - redirecting to dashboard.')
+        // console.error('Server error - redirecting to dashboard.')
         data = { message: 'Something went wrong. Please try again later.' }
       }
     } else {
       data = error
-      console.error(`Network or other error in ${path}:`, error)
+      // console.error(`Network or other error in ${path}:`, error)
     }
 
     // showErrors(data)
-    console.log(data)
+    // console.log(data)
     return Promise.reject(error)
   }
 }
+
+export const setToken = (token) => {
+  if (token) {
+    apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  } else {
+    delete apiClient.defaults.headers.common['Authorization'];
+  }
+};
+
+export const get = (path, params) => request({ path, method: 'GET', data: params });
+export const post = (path, data) => request({ path, method: 'POST', data });
+export const postAsForm = (path, data) => {
+  // console.log(data)
+  return request({ path, method: 'POST', data, isFormData: true });
+}
+export const put = (path, data) => request({ path, method: 'PUT', data });
+export const del = (path) => request({ path, method: 'DELETE' });
