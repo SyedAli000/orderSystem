@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { Box, Button, TextField, Typography, Paper, useTheme, useMediaQuery, Alert, CircularProgress } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const location = useLocation();
-
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");

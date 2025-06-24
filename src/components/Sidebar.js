@@ -4,8 +4,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  useTheme,
-  useMediaQuery,
   Box,
 } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -15,8 +13,6 @@ const drawerWidth = 240;
 const Sidebar = ({ onLogout }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleNavigation = (path) => {
     if (path === "/logout") {

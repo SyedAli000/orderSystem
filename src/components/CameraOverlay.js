@@ -62,6 +62,8 @@ const CameraOverlay = ({ open, onCapture, onClose }) => {
       }
     };
   }, [open, facingMode, onClose]);
+  console.log(error);
+  
 
   const captureImage = () => {
     if (videoRef.current) {

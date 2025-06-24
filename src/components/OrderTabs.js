@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useCallback } from "react";
 import {
   Tabs,
   Tab,
@@ -55,7 +55,7 @@ const OrderTabs = () => {
   const token = localStorage.getItem("token");
 
   // Fetch orders from API
-  const fetchOrders = async (status = "pending") => {
+const fetchOrders = useCallback(async (status = "pending") => {
     try {
       setLoading(true);
       setError("");
@@ -63,7 +63,7 @@ const OrderTabs = () => {
       if (status !== 'all') {
         url += `&status=${status}`;
       }
-      
+
       const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -84,7 +84,9 @@ const OrderTabs = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [apiUrl, page, token, itemsPerPage]);
+
+
 
   const handleQRUpload = async (file) => {
     if (!file) {
@@ -127,7 +129,7 @@ const OrderTabs = () => {
     const statusMapping = ['pending', 'shipped', 'mine'];
     const currentStatus = statusMapping[value];
     fetchOrders(currentStatus);
-  }, [page, value]);
+  }, [page, value,fetchOrders]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
